@@ -1,5 +1,5 @@
 {
-  "name": "gendiffs384",
+  "name": "gendiff",
   "version": "1.0.0",
   "description": "file compare lib",
   "scripts": {
