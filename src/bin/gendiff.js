@@ -7,7 +7,8 @@ const { version } = pjson;
 
 program
   .version(version, '-v, --version')
-  .option('-f, --format [type]', 'Output format')
   .arguments('<firstConfig> <secondConfig>')
+  .description('Compares two configuration files and shows a difference.')
+  .option('-f, --format [type]', 'Output format')
   .action(gendiff)
   .parse(process.argv);

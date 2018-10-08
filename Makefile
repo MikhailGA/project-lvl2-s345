@@ -2,7 +2,7 @@ install:
 	npm install
 
 start:
-	npm run babel-node -- src/bin/gendiff.js gendiff "file1" "file2"
+	npm run babel-node -- src/bin/gendiff.js -f json "file1" "file2"
 
 start_v:
 	npm run babel-node -- src/bin/gendiff.js -v
