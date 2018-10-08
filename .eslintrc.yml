@@ -9,7 +9,7 @@ extends:
   - 'airbnb-base'
   - 'plugin:jest/recommended'
   - 'plugin:flowtype/recommended'
-  - 'plugin:lodash-fp/recommended'
+  # - 'plugin:lodash-fp/recommended'
 
 rules:
   no-console: 0

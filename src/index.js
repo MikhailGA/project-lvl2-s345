@@ -1,5 +1,5 @@
 import fs from 'fs';
-import _ from 'lodash/fp';
+import _ from 'lodash';
 
 const getObjFromFile = (path) => {
   const file = fs.readFileSync(path).toString();
