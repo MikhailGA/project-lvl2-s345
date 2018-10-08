@@ -1,0 +1,11 @@
+---
+
+language: node_js
+node_js:
+  - node v10.3.0
+
+install:
+  - npm install
+
+script:
+- make test
