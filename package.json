@@ -1,5 +1,5 @@
 {
-  "name": "gendiffs345",
+  "name": "gendiffs34",
   "version": "1.1.0",
   "description": "file compare lib",
   "scripts": {
@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "commander": "^2.15.1",
+    "gendiffs345": "^1.1.0",
     "lodash": "^4.17.11"
   }
 }

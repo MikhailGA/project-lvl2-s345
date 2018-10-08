@@ -2,10 +2,11 @@
 
 language: node_js
 node_js:
-  - node v10.3.0
+  - node
 
 install:
   - npm install
 
 script:
+  - make lint
   - make test
