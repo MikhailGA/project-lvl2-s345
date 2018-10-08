@@ -1,31 +1,35 @@
-install: 
+install-deps:
 	npm install
 
+install-flow-typed:
+	npx flow-typed install
+
+install:
+	install-deps install-flow-typed
+
+check-types:
+	npx flow
+
 start:
-	npm run babel-node -- src/bin/gendiff.js -f json "file1" "file2"
+	npm run babel-node -- src/bin/gendiff.js "./__tests__/__fixtures__/before.json" "./__tests__/__fixtures__/after.json"
 
 start_v:
-	npm run babel-node -- src/bin/gendiff.js -v
-
-start_f:
-	npm run babel-node -- src/bin/gendiff.js -f
+	npx babel-node -- src/bin/gendiff.js -v
 
 start_h:
-	npm run babel-node -- src/bin/gendiff.js -h
-
-start_s:
-	npm run babel-node -- src/bin/gendiff.js -s
+	npx babel-node -- src/bin/gendiff.js -h
 
 publish:
 	npm publish
 
 lint:
-	eslint src/
+	npx eslint .
 	
 fix:
 	eslint src/ --fix
 
 build:
+	rm -rf dist
 	npm run build
 
 test:
