@@ -5,3 +5,4 @@
 # Asciinema
 * [Step1](https://asciinema.org/a/I9GCoWO50dhf3HK5kW6e8j8tR)
 * [Step2](https://asciinema.org/a/e8TsMxe4ccasiGtWdmkIJn0kI)
+* [Step3](https://asciinema.org/a/REpmiwK8HrLM9mXZzRs42DqkR)
