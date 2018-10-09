@@ -3,9 +3,9 @@ import ini from 'ini';
 import _ from 'lodash';
 
 const typeMapping = {
-  json: data => JSON.parse(data),
-  yaml: data => yaml.safeLoad(data),
-  ini: data => ini.parse(data),
+  json: JSON.parse,
+  yaml: yaml.safeLoad,
+  ini: ini.parse,
 };
 
 

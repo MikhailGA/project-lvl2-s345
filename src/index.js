@@ -1,14 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
-import parsers from './parsers';
+import parse from './parsers';
 
 const getObjFromFile = (pathFile) => {
   const data = fs.readFileSync(pathFile).toString();
 
   const extName = path.extname(pathFile).slice(1);
 
-  const result = parsers(extName, data);
+  const result = parse(extName, data);
   return result;
 };
 
