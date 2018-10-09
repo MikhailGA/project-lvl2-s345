@@ -16,6 +16,9 @@ start_json:
 start_yaml:
 	npm run babel-node -- src/bin/gendiff.js "./__tests__/__fixtures__/yaml/before.yaml" "./__tests__/__fixtures__/yaml/empty.yaml"
 
+start_ini:
+	npm run babel-node -- src/bin/gendiff.js "./__tests__/__fixtures__/ini/before.ini" "./__tests__/__fixtures__/ini/after.ini"
+
 start_v:
 	npx babel-node -- src/bin/gendiff.js -v
 

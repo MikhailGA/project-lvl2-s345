@@ -6,13 +6,10 @@ import parsers from './parsers';
 const getObjFromFile = (pathFile) => {
   const data = fs.readFileSync(pathFile).toString();
 
-  const type = path.extname(pathFile).slice(1);
-  try {
-    const result = parsers(type, data);
-    return result;
-  } catch (e) {
-    throw new Error(`Perse data from file fail. PATH: ${pathFile}\nError: ${e}`);
-  }
+  const extName = path.extname(pathFile).slice(1);
+
+  const result = parsers(extName, data);
+  return result;
 };
 
 const renderItem = (marker, key, value) => `${marker} ${key}: ${value}`;
