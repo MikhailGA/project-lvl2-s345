@@ -4,62 +4,37 @@ import _ from 'lodash';
 import parsers from './parsers';
 
 const getObjFromFile = (pathFile) => {
-  const file = fs.readFileSync(pathFile).toString();
-  if (file.length === 0) {
-    return {};
-  }
+  const data = fs.readFileSync(pathFile).toString();
 
-  const extName = path.extname(pathFile).slice(1);
-
-  if (!_.has(parsers, extName)) {
-    throw new Error(`Incorrect file extName: ${extName}`);
+  const type = path.extname(pathFile).slice(1);
+  try {
+    const result = parsers(type, data);
+    return result;
+  } catch (e) {
+    throw new Error(`Perse data from file fail. PATH: ${pathFile}\nError: ${e}`);
   }
-  return parsers[extName](file);
 };
-
-const getKeys = (obj1, obj2) => Object.keys({ ...obj1, ...obj2 });
 
 const renderItem = (marker, key, value) => `${marker} ${key}: ${value}`;
-
-const getKeyType = (beforeHasKey, afterHasKey) => {
-  if (beforeHasKey && afterHasKey) {
-    return 'same';
-  }
-  if (!beforeHasKey && afterHasKey) {
-    return 'added';
-  }
-  return 'removed';
-};
-
-const mapping = {
-  same: (key, { valueBefore, valueAfter }) => {
-    if (valueBefore === valueAfter) {
-      return renderItem(' ', key, valueAfter);
-    }
-    return `${renderItem('+', key, valueAfter)}\n${renderItem('-', key, valueBefore)}`;
-  },
-  added: (key, { valueAfter }) => renderItem('+', key, valueAfter),
-  removed: (key, { valueBefore }) => renderItem('-', key, valueBefore),
-};
 
 export default (pathToFile1, pathToFile2) => {
   const before = getObjFromFile(pathToFile1);
   const after = getObjFromFile(pathToFile2);
 
-  const keys = getKeys(before, after).map(key => (
-    {
-      key,
-      type: getKeyType(_.has(before, key), _.has(after, key)),
-    }));
+  const keys = Object.keys({ ...before, ...after });
 
-  const diffArr = keys.map((item) => {
-    const { key, type } = item;
-    const values = {
-      valueAfter: after[key],
-      valueBefore: before[key],
-    };
-    return mapping[type](key, values);
-  }, []);
+  const diffArr = keys.map((key) => {
+    if (_.has(before, key) && _.has(after, key)) {
+      if (before[key] === after[key]) {
+        return renderItem(' ', key, after[key]);
+      }
+      return `${renderItem('+', key, after[key])}\n${renderItem('-', key, before[key])}`;
+    }
+    if (!_.has(before, key) && _.has(after, key)) {
+      return renderItem('+', key, after[key]);
+    }
+    return renderItem('-', key, before[key]);
+  });
 
   return diffArr.join('\n');
 };

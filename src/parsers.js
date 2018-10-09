@@ -1,10 +1,9 @@
 import yaml from 'js-yaml';
 
-const parseJson = file => JSON.parse(file);
-const parseYaml = file => yaml.safeLoad(file);
-
-
-export default {
-  json: parseJson,
-  yaml: parseYaml,
+const typeMapping = {
+  json: data => JSON.parse(data),
+  yaml: data => yaml.safeLoad(data),
 };
+
+
+export default (type, data) => typeMapping[type](data);
