@@ -1,9 +1,20 @@
 import fs from 'fs';
+import path from 'path';
 import _ from 'lodash';
+import parses from './parses';
 
-const getObjFromFile = (path) => {
-  const file = fs.readFileSync(path).toString();
-  return file.length ? JSON.parse(file) : {};
+const getObjFromFile = (pathFile) => {
+  const file = fs.readFileSync(pathFile).toString();
+  if (file.length === 0) {
+    return {};
+  }
+
+  const extName = path.extname(pathFile).slice(1);
+
+  if (!_.has(parses, extName)) {
+    throw new Error(`Incorrect file extName: ${extName}`);
+  }
+  return parses[extName](file);
 };
 
 const getKeys = (obj1, obj2) => Object.keys({ ...obj1, ...obj2 });
