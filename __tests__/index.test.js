@@ -1,5 +1,5 @@
 import fs from 'fs';
-// import path from 'path';
+import path from 'path';
 import genDiff from '../src';
 
 const beforeJSONPath = './__tests__/__fixtures__/json/before.json';
@@ -42,5 +42,7 @@ test('Test error path', () => {
 
 test('Test extname error', () => {
   const extNameErrorPath = './__tests__/__fixtures__/extNameError.yason';
-  expect(() => genDiff(extNameErrorPath, afterJSONPath)).toThrow();
+  const type = path.extname(extNameErrorPath).slice(1);
+  const errorMessage = `Incorrect file extname! ExtName: ${type}`;
+  expect(() => genDiff(extNameErrorPath, afterJSONPath)).toThrow(errorMessage);
 });
