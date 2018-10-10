@@ -1,23 +1,16 @@
-import fs from 'fs';
-import path from 'path';
 import _ from 'lodash';
-import parse from './parsers';
-
-const getObjFromFile = (pathFile) => {
-  const data = fs.readFileSync(pathFile).toString();
-
-  const extName = path.extname(pathFile).slice(1);
-
-  const result = parse(extName, data);
-  return result;
-};
+import buildAst from './astBuilder';
+import buildObj from './objBuilder';
+import render from './render';
 
 const renderItem = (marker, key, value) => `  ${marker} ${key}: ${value}`;
 
 export default (pathToFile1, pathToFile2) => {
-  const before = getObjFromFile(pathToFile1);
-  const after = getObjFromFile(pathToFile2);
-
+  const before = buildObj(pathToFile1);
+  const after = buildObj(pathToFile2);
+  const ast = buildAst(before, after);
+  console.log(ast);
+  console.log(render(ast));
   const keys = Object.keys({ ...before, ...after });
 
   const diffArr = keys.map((key) => {
