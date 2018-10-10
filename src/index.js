@@ -12,7 +12,7 @@ const getObjFromFile = (pathFile) => {
   return result;
 };
 
-const renderItem = (marker, key, value) => `${marker} ${key}: ${value}`;
+const renderItem = (marker, key, value) => `  ${marker} ${key}: ${value}`;
 
 export default (pathToFile1, pathToFile2) => {
   const before = getObjFromFile(pathToFile1);
@@ -33,5 +33,5 @@ export default (pathToFile1, pathToFile2) => {
     return renderItem('-', key, before[key]);
   });
 
-  return diffArr.join('\n');
+  return `{\n${diffArr.join('\n')}\n}`;
 };
