@@ -17,9 +17,6 @@ const plainComplicated = () => fs.readFileSync(`${testPath}/results/plainComplic
 test('Test JSON file', () => {
   expect(genDiff(beforeJSONPath, afterJSONPath)).toBe(diff());
   expect(genDiff(beforeJSONPath, afterJSONPath, 'plain')).toBe(plain());
-});
-
-test('Test JSON complicated file', () => {
   expect(genDiff(beforeJSONPath2, afterJSONPath2)).toBe(diffComlicated());
   expect(genDiff(beforeJSONPath2, afterJSONPath2, 'plain')).toBe(plainComplicated());
 });
@@ -33,9 +30,6 @@ const afterYAMLPath2 = `${testPath}/yaml/afterComplicated.yaml`;
 test('Test YAML file', () => {
   expect(genDiff(beforeYAMLPath, afterYAMLPath)).toBe(diff());
   expect(genDiff(beforeYAMLPath, afterYAMLPath, 'plain')).toBe(plain());
-});
-
-test('Test YAML complicated file', () => {
   expect(genDiff(beforeYAMLPath2, afterYAMLPath2)).toBe(diffComlicated());
   expect(genDiff(beforeYAMLPath2, afterYAMLPath2, 'plain')).toBe(plainComplicated());
 });
@@ -50,9 +44,7 @@ const afterINIPath2 = `${testPath}/ini/afterComplicated.ini`;
 test('Test INI file', () => {
   expect(genDiff(beforeINIPath, afterINIPath)).toBe(diff());
   expect(genDiff(beforeINIPath, afterINIPath, 'plain')).toBe(plain());
-});
 
-test('Test INI complicated file', () => {
   expect(genDiff(beforeINIPath2, afterINIPath2)).toBe(diffComlicated());
   expect(genDiff(beforeINIPath2, afterINIPath2, 'plain')).toBe(plainComplicated());
 });
