@@ -11,13 +11,13 @@ check-types:
 	npx flow
 
 start_json:
-	npm run babel-node -- src/bin/gendiff.js "./__tests__/__fixtures__/json/before3.json" "./__tests__/__fixtures__/json/after3.json"
+	npm run babel-node -- src/bin/gendiff.js "./__tests__/__fixtures__/json/before2.json" "./__tests__/__fixtures__/json/after2.json"
 
 start_yaml:
 	npm run babel-node -- src/bin/gendiff.js "./__tests__/__fixtures__/yaml/before.yaml" "./__tests__/__fixtures__/yaml/empty.yaml"
 
 start_ini:
-	npm run babel-node -- src/bin/gendiff.js "./__tests__/__fixtures__/ini/before.ini" "./__tests__/__fixtures__/ini/after.ini"
+	npm run babel-node -- src/bin/gendiff.js "./__tests__/__fixtures__/ini/before2.ini" "./__tests__/__fixtures__/ini/after2.ini"
 
 start_v:
 	npx babel-node -- src/bin/gendiff.js -v

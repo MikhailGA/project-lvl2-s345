@@ -1,36 +1,35 @@
 import _ from 'lodash';
 
-const getTab = n => '  '.repeat(n);
-const isObject = item => typeof item === 'object';
-
-const renderObject = obj => Object.keys(obj).map(key => `${key}: ${obj[key]}`);
-
+const getTab = count => '  '.repeat(count);
+const isArray = item => item instanceof Array;
 
 const mapping = {
-  same: (item, n) => `${getTab(n)}  ${item.name}: ${item.value}`,
-  added: (item, n) => `${getTab(n)}+ ${item.name}: ${item.value}`,
-  deleted: (item, n) => `${getTab(n)}- ${item.name}: ${item.value}`,
-  updated: (item, n) => `${getTab(n)}+ ${item.name}: ${item.value.new}\n${getTab(n)}- ${item.name}: ${item.value.old}`,
+  same: n => `${getTab(n)} `,
+  added: n => `${getTab(n)}+`,
+  deleted: n => `${getTab(n)}-`,
 };
-// `${renderItem('+', key, after[key])}\n${renderItem('-', key, before[key])}`
+
+const renderGroup = ({ name, type }, body, countTab) => (
+  `${mapping[type](countTab)} ${name}: {\n${body}\n  ${getTab(countTab)}}`);
+
+const renderItem = ({ name, type, value }, countTab) => (
+  `${mapping[type](countTab)} ${name}: ${value}`);
+
+
 const render = ({ children }) => {
-
   const iter = (item, tabCount) => {
-    return mapping[item.type](item, tabCount);
-  };
-  // if (_.has(ast, 'children')) {
-  //   const { children } = ast;
-
-  //   const result = children.map(item => mapping[item.type](item, 1));
-  //   return `{\n${result.join('\n')}\n}`;
-  // }
-  const arr = children.map((item) => {
-    if (isObject(item)) {
-      return `{\n${renderObject(item.value).join('\n')}\n}`;
+    if (isArray(item)) {
+      const items = item.map(node => iter(node, tabCount));
+      return items.join('\n');
     }
-    return iter(item, 1);
-  });
-  return `{\n${arr.join('\n')}\n}`;
+    if (_.has(item, 'children')) {
+      const body = item.children.map(child => iter(child, tabCount + 2));
+      return renderGroup(item, body.join('\n'), tabCount);
+    }
+    return renderItem(item, tabCount);
+  };
+
+  return `{\n${children.map(node => iter(node, 1)).join('\n')}\n}`;
 };
 
 export default render;

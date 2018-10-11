@@ -5,7 +5,10 @@ const result1 = {
   name: 'root',
   children: [
     { name: 'host', value: 'hexlet.io', type: 'same' },
-    { name: 'timeout', value: { new: 20, old: 50 }, type: 'updated' },
+    [
+      { name: 'timeout', value: 20, type: 'added' },
+      { name: 'timeout', value: 50, type: 'deleted' },
+    ],
     { name: 'proxy', value: '123.234.53.22', type: 'deleted' },
     { name: 'follow', value: false, type: 'deleted' },
     { name: 'verbose', value: true, type: 'added' },
@@ -21,7 +24,10 @@ const result2 = {
       children: [
         { name: 'setting1', value: 'Value 1', type: 'same' },
         { name: 'setting2', value: '200', type: 'deleted' },
-        { name: 'setting3', value: { old: true, new: { key: 'value' } }, type: 'updated' },
+        [
+          { name: 'setting3', children: [{ name: 'key', value: 'value', type: 'same' }], type: 'added' },
+          { name: 'setting3', value: true, type: 'deleted' },
+        ],
         {
           name: 'setting6',
           type: 'same',
@@ -32,28 +38,26 @@ const result2 = {
         },
         { name: 'follow', value: false, type: 'added' },
         { name: 'setting4', value: 'blah blah', type: 'added' },
-        {
-          name: 'setting5',
-          type: 'added',
-          value: { key5: 'value5' },
-        },
+        { name: 'setting5', type: 'added', children: [{ name: 'key5', value: 'value5', type: 'same' }] },
       ],
     },
     {
       name: 'group1',
       type: 'same',
       children: [
-        { name: 'baz', value: { old: 'bas', new: 'bars' }, type: 'updated' },
+        [
+          { name: 'baz', value: 'bars', type: 'added' },
+          { name: 'baz', value: 'bas', type: 'deleted' },
+        ],
         { name: 'foo', value: 'bar', type: 'same' },
-        {
-          name: 'nest',
-          value: { old: { key: 'value' }, new: 'str' },
-          type: 'updated',
-        },
+        [
+          { name: 'nest', value: 'str', type: 'added' },
+          { name: 'nest', children: [{ name: 'key', value: 'value', type: 'same' }], type: 'deleted' },
+        ],
       ],
     },
-    { name: 'group2', type: 'deleted', value: { abc: '12345' } },
-    { name: 'group3', type: 'added', value: { fee: '100500' } },
+    { name: 'group2', type: 'deleted', children: [{ name: 'abc', value: '12345', type: 'same' }] },
+    { name: 'group3', type: 'added', children: [{ name: 'fee', value: '100500', type: 'same' }] },
   ],
 };
 
