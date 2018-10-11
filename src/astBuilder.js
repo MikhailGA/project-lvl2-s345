@@ -1,48 +1,50 @@
 import _ from 'lodash';
-import Parametr from './nodes/Parametr';
-import Group from './nodes/Group';
 
 const isObject = item => typeof item === 'object';
 
-const exist = item => item !== undefined;
-
-const getNode = (name, type, argument) => {
-  if (isObject(argument)) {
-    const children = Object.keys(argument).map(key => (
-      getNode(key, 'same', argument[key])));
-    return new Group(name, type, children);
-  }
-  return new Parametr(name, type, argument);
-};
-
-const buildNode = (key, beforeValue, afterValue) => {
-  if (exist(beforeValue) && exist(afterValue)) {
-    if (beforeValue === afterValue) {
-      return getNode(key, 'same', afterValue);
-    }
-    return [getNode(key, 'added', afterValue), getNode(key, 'deleted', beforeValue)];
-  }
-  if (!exist(beforeValue) && exist(afterValue)) {
-    return getNode(key, 'added', afterValue);
-  }
-  return getNode(key, 'deleted', beforeValue);
-};
+const typeActions = [
+  {
+    name: 'sameGroup',
+    check: (key, before, after) => _.has(before, key) && _.has(after, key)
+      && isObject(before[key]) && isObject(after[key]),
+    action: (key, before, after, fn) => ({ name: key, type: 'same', children: fn(before[key], after[key]) }),
+  },
+  {
+    name: 'added',
+    check: (key, before, after) => !_.has(before, key) && _.has(after, key),
+    action: (key, before, after) => ({ name: key, type: 'added', value: after[key] }),
+  },
+  {
+    name: 'deleted',
+    check: (key, before, after) => _.has(before, key) && !_.has(after, key),
+    action: (key, before) => ({ name: key, type: 'deleted', value: before[key] }),
+  },
+  {
+    name: 'sameProp',
+    check: (key, before, after) => _.has(before, key) && _.has(after, key)
+      && before[key] === after[key],
+    action: (key, after) => ({ name: key, type: 'same', value: after[key] }),
+  },
+  {
+    name: 'updated',
+    check: (key, before, after) => _.has(before, key) && _.has(after, key)
+      && before[key] !== after[key],
+    action: (key, before, after) => ({
+      name: key,
+      type: 'updated',
+      valueBefore: before[key],
+      valueAfter: after[key],
+    }),
+  },
+];
 
 const getAST = (before, after) => {
   const keys = Object.keys({ ...before, ...after });
 
-  const ast = keys.reduce((acc, key) => {
-    const valueBefore = _.has(before, key) ? before[key] : undefined;
-    const valueAfter = _.has(after, key) ? after[key] : undefined;
-
-    if (isObject(valueBefore) && isObject(valueAfter)) {
-      return [...acc, new Group(key, 'same', getAST(valueBefore, valueAfter))];
-    }
-    if (isObject(valueBefore) || isObject(valueAfter)) {
-      return [...acc, buildNode(key, valueBefore, valueAfter)];
-    }
-    return [...acc, buildNode(key, valueBefore, valueAfter)];
-  }, []);
+  const ast = keys.map((key) => {
+    const { action } = typeActions.find(({ check }) => check(key, before, after));
+    return action(key, before, after, getAST);
+  });
   return ast;
 };
 
