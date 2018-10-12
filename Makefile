@@ -10,14 +10,8 @@ install:
 check-types:
 	npx flow
 
-start_json:
-	npm run babel-node -- src/bin/gendiff.js -f json "./__tests__/__fixtures__/json/beforeComplicated.json" "./__tests__/__fixtures__/json/afterComplicated.json"
-
-start_yaml:
-	npm run babel-node -- src/bin/gendiff.js "./__tests__/__fixtures__/yaml/before.yaml" "./__tests__/__fixtures__/yaml/empty.yaml"
-
-start_ini:
-	npm run babel-node -- src/bin/gendiff.js "./__tests__/__fixtures__/ini/before2.ini" "./__tests__/__fixtures__/ini/after2.ini"
+start:
+	npm run babel-node -- src/bin/gendiff.js -f json "./__tests__/__fixtures__/yaml/before.yaml" "./__tests__/__fixtures__/yaml/after.yaml"
 
 start_v:
 	npx babel-node -- src/bin/gendiff.js -v
