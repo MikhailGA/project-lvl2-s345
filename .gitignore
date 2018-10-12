@@ -2,7 +2,6 @@
 /dist/
 /.vscode/
 *.log
-.eslintignore
 jsconfig.json
 flow-typed
 .tern-port

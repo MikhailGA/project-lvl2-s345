@@ -18,6 +18,5 @@ export default (pathToFile1, pathToFile2, format) => {
   const after = buildObj(pathToFile2);
 
   const ast = buildAst(before, after);
-
   return render(ast, format);
 };

@@ -1,29 +1,29 @@
 import _ from 'lodash';
 
-const isObject = item => typeof item === 'object';
+const getUniqKeys = (obj1, obj2) => Object.keys({ ...obj1, ...obj2 });
 
-const typeActions = [
+const nodeType = [
   {
-    name: 'sameGroup',
+    name: 'nest',
     check: (key, before, after) => _.has(before, key) && _.has(after, key)
-      && isObject(before[key]) && isObject(after[key]),
-    action: (key, before, after, fn) => ({ name: key, type: 'same', children: fn(before[key], after[key]) }),
+      && _.isObject(before[key]) && _.isObject(after[key]),
+    action: (key, before, after, fn) => ({ name: key, type: 'nest', children: fn(before[key], after[key]) }),
   },
   {
     name: 'added',
     check: (key, before, after) => !_.has(before, key) && _.has(after, key),
-    action: (key, before, after) => ({ name: key, type: 'added', value: after[key] }),
+    action: (key, before, after) => ({ name: key, type: 'added', valueAfter: after[key] }),
   },
   {
     name: 'deleted',
     check: (key, before, after) => _.has(before, key) && !_.has(after, key),
-    action: (key, before) => ({ name: key, type: 'deleted', value: before[key] }),
+    action: (key, before) => ({ name: key, type: 'deleted', valueBefore: before[key] }),
   },
   {
-    name: 'sameProp',
+    name: 'unchanged',
     check: (key, before, after) => _.has(before, key) && _.has(after, key)
       && before[key] === after[key],
-    action: (key, after) => ({ name: key, type: 'same', value: after[key] }),
+    action: (key, after) => ({ name: key, type: 'unchanged', valueAfter: after[key] }),
   },
   {
     name: 'updated',
@@ -39,16 +39,13 @@ const typeActions = [
 ];
 
 const getAST = (before, after) => {
-  const keys = Object.keys({ ...before, ...after });
+  const keys = getUniqKeys(before, after);
 
   const ast = keys.map((key) => {
-    const { action } = typeActions.find(({ check }) => check(key, before, after));
+    const { action } = nodeType.find(({ check }) => check(key, before, after));
     return action(key, before, after, getAST);
   });
   return ast;
 };
 
-export default (before, after) => ({
-  name: 'root',
-  children: getAST(before, after),
-});
+export default getAST;

@@ -11,7 +11,7 @@ check-types:
 	npx flow
 
 start_json:
-	npm run babel-node -- src/bin/gendiff.js -f plain "./__tests__/__fixtures__/json/before.json" "./__tests__/__fixtures__/json/after.json"
+	npm run babel-node -- src/bin/gendiff.js -f json "./__tests__/__fixtures__/json/beforeComplicated.json" "./__tests__/__fixtures__/json/afterComplicated.json"
 
 start_yaml:
 	npm run babel-node -- src/bin/gendiff.js "./__tests__/__fixtures__/yaml/before.yaml" "./__tests__/__fixtures__/yaml/empty.yaml"

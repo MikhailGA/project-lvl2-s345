@@ -1,47 +1,47 @@
 import _ from 'lodash';
 
-const isObject = item => typeof item === 'object';
-const getTab = count => '  '.repeat(count);
+const getDeep = deeplvl => '  '.repeat(deeplvl);
+const getType = value => (_.isObject(value) ? 'complex' : 'simple');
 
-const mapping = {
-  same: n => `${getTab(n)} `,
-  added: n => `${getTab(n)}+`,
-  deleted: n => `${getTab(n)}-`,
+const valueTypeMappin = {
+  simple: value => value,
+  complex: (obj, deepLvl) => {
+    const items = Object.keys(obj).map(key => `${getDeep(deepLvl + 2)}  ${key}: ${obj[key]}`);
+    return `{\n${items.join('\n')}\n${getDeep(deepLvl + 1)}}`;
+  },
 };
 
-const renderItem = (name, type, value, countTab) => {
-  if (isObject(value)) {
-    const items = Object.keys(value).map(key => renderItem(key, 'same', value[key], countTab + 2));
-    const noNameitems = `{\n${items.join('\n')}\n${getTab(countTab + 1)}}`;
-    return `${mapping[type](countTab)} ${name}: ${noNameitems}`;
-  }
-  return `${mapping[type](countTab)} ${name}: ${value}`;
+const renderItem = (name, value, deepLvl, sign) => {
+  const type = getType(value);
+  const result = valueTypeMappin[type](value, deepLvl);
+  return `${getDeep(deepLvl)}${sign || ' '} ${name}: ${result}`;
 };
 
-const renderGroup = ({ name, type }, body, countTab) => (
-  `${mapping[type](countTab)} ${name}: {\n${body}\n  ${getTab(countTab)}}`);
+const nodeTypeMappin = {
+  updated: ({ name, valueBefore, valueAfter }, deepLvl) => {
+    const result = [
+      renderItem(name, valueAfter, deepLvl, '+'),
+      renderItem(name, valueBefore, deepLvl, '-')];
+    return result.join('\n');
+  },
 
+  deleted: ({ name, valueBefore }, deepLvl) => renderItem(name, valueBefore, deepLvl, '-'),
 
-export default ({ children }) => {
-  const iter = (item, tabCount) => {
-    if (_.has(item, 'children')) {
-      const body = item.children.map(child => iter(child, tabCount + 2));
-      return renderGroup(item, body.join('\n'), tabCount);
-    }
-    if (item.type === 'updated') {
-      const {
-        name,
-        valueBefore,
-        valueAfter,
-      } = item;
-      const result = [
-        renderItem(name, 'added', valueAfter, tabCount),
-        renderItem(name, 'deleted', valueBefore, tabCount),
-      ];
-      return result.join('\n');
-    }
-    return renderItem(..._.values(item), tabCount);
+  added: ({ name, valueAfter }, deepLvl) => renderItem(name, valueAfter, deepLvl, '+'),
+
+  nest: ({ name, children }, deepLvl, fn) => {
+    const deep = getDeep(deepLvl + 1);
+    const body = fn(children, deepLvl + 2);
+    return `${deep}${name}: {\n${body}\n${deep}}`;
+  },
+
+  unchanged: ({ name, valueAfter }, deepLvl) => renderItem(name, valueAfter, deepLvl),
+};
+
+export default (ast) => {
+  const iter = (node, deepLvl) => {
+    const result = node.map(child => nodeTypeMappin[child.type](child, deepLvl, iter));
+    return result.join('\n');
   };
-
-  return `{\n${children.map(node => iter(node, 1)).join('\n')}\n}`;
+  return `{\n${iter(ast, 1)}\n}`;
 };
