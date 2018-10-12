@@ -1,19 +1,17 @@
 import _ from 'lodash';
 
 const getDeep = deeplvl => '  '.repeat(deeplvl);
-const getType = value => (_.isObject(value) ? 'complex' : 'simple');
 
-const valueTypeMappin = {
-  simple: value => value,
-  complex: (obj, deepLvl) => {
-    const items = Object.keys(obj).map(key => `${getDeep(deepLvl + 2)}  ${key}: ${obj[key]}`);
+const stringify = (value, deepLvl) => {
+  if (_.isObject(value)) {
+    const items = Object.keys(value).map(key => `${getDeep(deepLvl + 2)}  ${key}: ${value[key]}`);
     return `{\n${items.join('\n')}\n${getDeep(deepLvl + 1)}}`;
-  },
+  }
+  return value;
 };
 
 const renderItem = (name, value, deepLvl, sign) => {
-  const type = getType(value);
-  const result = valueTypeMappin[type](value, deepLvl);
+  const result = stringify(value, deepLvl);
   return `${getDeep(deepLvl)}${sign || ' '} ${name}: ${result}`;
 };
 
@@ -22,7 +20,7 @@ const nodeTypeMappin = {
     const result = [
       renderItem(name, valueAfter, deepLvl, '+'),
       renderItem(name, valueBefore, deepLvl, '-')];
-    return result.join('\n');
+    return result;
   },
 
   deleted: ({ name, valueBefore }, deepLvl) => renderItem(name, valueBefore, deepLvl, '-'),
@@ -41,7 +39,7 @@ const nodeTypeMappin = {
 export default (ast) => {
   const iter = (node, deepLvl) => {
     const result = node.map(child => nodeTypeMappin[child.type](child, deepLvl, iter));
-    return result.join('\n');
+    return _.flatten(result).join('\n');
   };
   return `{\n${iter(ast, 1)}\n}`;
 };

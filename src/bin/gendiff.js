@@ -3,11 +3,11 @@ import program from 'commander';
 import genDiff from '..';
 import pjson from '../../package.json';
 
-const { version } = pjson;
+const { version, description } = pjson;
 
 program
   .version(version, '-v, --version')
-  .description('Compares two configuration files and shows a difference.')
+  .description(description)
   .option('-f, --format [type]', 'output format', 'diff')
   .arguments('<firstConfig> <secondConfig>')
   .action((firstConfig, secondConfig) => {

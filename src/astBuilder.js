@@ -1,7 +1,5 @@
 import _ from 'lodash';
 
-const getUniqKeys = (obj1, obj2) => Object.keys({ ...obj1, ...obj2 });
-
 const nodeType = [
   {
     name: 'nest',
@@ -39,7 +37,7 @@ const nodeType = [
 ];
 
 const getAST = (before, after) => {
-  const keys = getUniqKeys(before, after);
+  const keys = _.union(Object.keys(before), Object.keys(after));
 
   const ast = keys.map((key) => {
     const { action } = nodeType.find(({ check }) => check(key, before, after));
