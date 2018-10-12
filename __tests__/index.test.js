@@ -1,5 +1,4 @@
 import fs from 'fs';
-import path from 'path';
 import genDiff from '../src';
 
 const testPath = './__tests__/__fixtures__';
@@ -54,17 +53,4 @@ test('Test INI file -f plain', () => {
 
 test('Test INI file options -f json', () => {
   expect(genDiff(beforeINIPath, afterINIPath, 'json')).toBe(json());
-});
-
-
-test('Test error path', () => {
-  const unknownPath = `${testPath}/unknown.json`;
-  expect(() => genDiff(unknownPath, afterJSONPath)).toThrow();
-});
-
-test('Test extname error', () => {
-  const extNameErrorPath = `${testPath}/extNameError.yason`;
-  const extName = path.extname(extNameErrorPath).slice(1);
-  const errorMessage = `Incorrect file extname! Extname: ${extName}`;
-  expect(() => genDiff(extNameErrorPath, afterJSONPath)).toThrow(errorMessage);
 });

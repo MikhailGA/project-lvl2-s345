@@ -9,3 +9,4 @@
 * [Step4](https://asciinema.org/a/wfE4hB1QVVJzqY32fJccKVjAh)
 * [Step5](https://asciinema.org/a/hIncfnqiwO0q0evMlNyv5nulo)
 * [Step6](https://asciinema.org/a/VBLSByManGwBpp5Eys9uvUGBu)
+* [Step7](https://asciinema.org/a/NWM1RnMlASPwk5H0Xckc5V4A4)
