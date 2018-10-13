@@ -3,11 +3,12 @@ import _ from 'lodash';
 const getDeep = deeplvl => '  '.repeat(deeplvl);
 
 const stringify = (value, deepLvl) => {
-  if (_.isObject(value)) {
-    const items = Object.keys(value).map(key => `${getDeep(deepLvl + 2)}  ${key}: ${value[key]}`);
-    return `{\n${items.join('\n')}\n${getDeep(deepLvl + 1)}}`;
+  if (!_.isObject(value)) {
+    return value;
   }
-  return value;
+
+  const items = Object.keys(value).map(key => `${getDeep(deepLvl + 2)}  ${key}: ${value[key]}`);
+  return `{\n${items.join('\n')}\n${getDeep(deepLvl + 1)}}`;
 };
 
 const renderItem = (name, value, deepLvl, sign) => {
