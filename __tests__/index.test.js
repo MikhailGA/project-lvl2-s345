@@ -11,7 +11,7 @@ const plain = () => fs.readFileSync(`${testPath}/results/plain.txt`, 'utf8');
 const json = () => fs.readFileSync(`${testPath}/results/json.json`, 'utf8');
 
 test('Test JSON file', () => {
-  expect(genDiff(beforeJSONPath, afterJSONPath)).toBe(diff());
+  expect(genDiff(beforeJSONPath, afterJSONPath, 'diff')).toBe(diff());
 });
 
 test('Test JSON file options -f plain', () => {
@@ -27,7 +27,7 @@ const beforeYAMLPath = `${testPath}/yaml/before.yaml`;
 const afterYAMLPath = `${testPath}/yaml/after.yaml`;
 
 test('Test YAML file', () => {
-  expect(genDiff(beforeYAMLPath, afterYAMLPath)).toBe(diff());
+  expect(genDiff(beforeYAMLPath, afterYAMLPath, 'diff')).toBe(diff());
 });
 
 test('Test YAML file options -f plain', () => {
@@ -43,7 +43,7 @@ const afterINIPath = `${testPath}/ini/after.ini`;
 
 
 test('Test INI file', () => {
-  expect(genDiff(beforeINIPath, afterINIPath)).toBe(diff());
+  expect(genDiff(beforeINIPath, afterINIPath, 'diff')).toBe(diff());
 });
 
 

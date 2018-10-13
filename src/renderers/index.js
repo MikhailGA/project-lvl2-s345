@@ -10,7 +10,9 @@ export default (ast, format) => {
       return JSON.stringify(ast, replace, 2);
     case 'plain':
       return renderPlain(ast);
-    default:
+    case 'diff':
       return renderDiff(ast);
+    default:
+      throw new Error(`Value: "${format}". Invalid for option 'format'`);
   }
 };
